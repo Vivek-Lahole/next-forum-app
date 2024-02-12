@@ -9,3 +9,40 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  // unique id 
+  id String @id @default(uuid())
+
+  // User information
+  email        String @unique
+  firstName    String
+  passwordHash String
+
+  posts Post[]
+
+  // meta-data
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Category {
+  ANONYMOUS
+  NON_ANONYMOUS
+}
+
+model Post {
+  id String @id @default(uuid())
+
+  // user User @relation('')
+  category Category @default(NON_ANONYMOUS)
+  src      String
+  content  String   @db.Text
+
+  // meta-data
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
