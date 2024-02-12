@@ -21,12 +21,12 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "axios": "^1.6.7",
-    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.325.0",
     "next": "14.1.0",
+    "next-auth": "^5.0.0-beta.9",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
@@ -37,7 +37,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",

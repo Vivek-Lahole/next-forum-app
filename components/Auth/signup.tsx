@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ToastAction } from "@/components/ui/toast";
+import { signupFormSchema } from "@/FormSchemas/SignUpForm";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Card,
@@ -27,29 +27,6 @@ import { useState, useTransition } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { DotLoader } from "react-spinners";
-
-const signupFormSchema = z.object({
-  username: z
-    .string({
-      required_error: "username is required!",
-      invalid_type_error: "username must be a string",
-    })
-    .min(2, {
-      message: "username should have at least 2 characters.",
-    })
-    .max(20, {
-      message: "username cannot have more than 20 characters.",
-    }),
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, {
-      message: "password should have at least 6 characters.",
-    })
-    .max(20, {
-      message: "password cannot have more than 20 characters.",
-    }),
-});
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
