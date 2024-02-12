@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { signupFormSchema } from "@/FormSchemas/SignUpForm";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Card,
   CardContent,
@@ -24,34 +26,13 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState, useTransition } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
-const signupFormSchema = z.object({
-  username: z
-    .string({
-      required_error: "username is required!",
-      invalid_type_error: "username must be a string",
-    })
-    .min(2, {
-      message: "username should have at least 2 characters.",
-    })
-    .max(20, {
-      message: "username cannot have more than 20 characters.",
-    }),
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, {
-      message: "password should have at least 6 characters.",
-    })
-    .max(20, {
-      message: "password cannot have more than 20 characters.",
-    }),
-});
+import { DotLoader } from "react-spinners";
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { toast } = useToast();
 
   const signupForm = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -63,7 +44,39 @@ const SignUpForm = () => {
   });
 
   async function signupSubmit(values: z.infer<typeof signupFormSchema>) {
-    console.log(values);
+    const { username, email, password } = values;
+
+    const payload = {
+      username,
+      email,
+      password,
+    };
+
+    startTransition(async () => {
+      try {
+        const response = await axios.post("/api/signup", payload);
+        toast({
+          variant: "default",
+          title: `${response.data.message}`,
+        });
+        router.push("/");
+      } catch (error: any) {
+        console.log("Error : ", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
+      }
+    });
+  }
+
+  if (isPending) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <DotLoader color="#4A96FF" size={90} speedMultiplier={1} />
+      </div>
+    );
   }
 
   return (
@@ -122,7 +135,7 @@ const SignUpForm = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">password</FormLabel>
+                    <FormLabel className="font-normal">Password</FormLabel>
                     <FormControl>
                       <div className="flex items-center space-x-1">
                         <Input

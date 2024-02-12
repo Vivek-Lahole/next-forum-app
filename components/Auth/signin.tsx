@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { loginFormSchema } from "@/FormSchemas/SignInForm";
 import {
   Card,
   CardContent,
@@ -24,29 +25,6 @@ import { Eye, EyeOff, GithubIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Separator } from "@radix-ui/react-separator";
-
-const loginFormSchema = z.object({
-  username: z
-    .string({
-      required_error: "username is required!",
-      invalid_type_error: "username must be a string",
-    })
-    .min(2, {
-      message: "username should have at least 2 characters.",
-    })
-    .max(30, {
-      message: "username cannot have more than 20 characters.",
-    }),
-  password: z
-    .string()
-    .min(6, {
-      message: "password is required.",
-    })
-    .max(20, {
-      message: "password is required.",
-    }),
-});
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
