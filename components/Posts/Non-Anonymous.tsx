@@ -1,11 +1,11 @@
 "use client";
-import { CreatePost } from "@/components/CreatePost";
 import { ForumCard } from "@/components/ForumCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DotLoader } from "react-spinners";
+import { Badge } from "@/components/ui/badge";
 
 interface Post {
   content: string;
@@ -18,16 +18,15 @@ interface Post {
   id: string;
 }
 
-const Feed = () => {
-  const user = useCurrentUser();
+const NonAnonymous = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get("/api/feed")
+      .get("/api/posts/nonanonymous")
       .then((response) => {
-        setPosts(response.data.posts);
+        setPosts(response.data.nonanonymousPosts);
       })
       .catch((error) => {
         console.log("Error Fetching Posts", error);
@@ -35,32 +34,28 @@ const Feed = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [setPosts]);
+  }, []);
 
   if (loading) {
     return (
-      <div className="w-screen h-full flex items-center justify-center">
+      <div className="w-full h-screen flex items-center justify-center">
         <DotLoader color="#ffffff" size={60} speedMultiplier={1} />
       </div>
     );
   }
 
+  if (!posts.length) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Badge>Oops No posts yet!</Badge>
+      </div>
+    );
+  }
+
   return (
-    <ScrollArea className="h-screen w-full flex items-center justify-center rounded-md p-4">
-      <div className="p-4 flex flex-col items-center">
-        {user && (
-          <div className="flex flex-col w-full items-center justify-center">
-            <div className="w-[700px] space-y-4 m-6">
-              <h2 className=" text-2xl">Hello {user?.email}</h2>
-              <p className=" text-sm text-muted-foreground">
-                How are you doing today? Would you like to share something with
-                the community! 🤗
-              </p>
-            </div>
-            <CreatePost setPosts={setPosts} />
-          </div>
-        )}
-        <div className="flex flex-col items-center justify-center space-y-2 mt-3">
+    <ScrollArea className="h-screen w-full flex items-center justify-center rounded-md mt-4">
+      <div className=" flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center space-y-2">
           {posts.map((item: Post) => (
             <ForumCard
               src={item.src}
@@ -79,4 +74,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default NonAnonymous;

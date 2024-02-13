@@ -20,6 +20,8 @@ import { MessageSquare, MoreHorizontal, Trash } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
 import { formatElapsedTime } from "@/lib/utils";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import axios from "axios";
 
 interface ForumCardProps {
   src: string;
@@ -27,6 +29,20 @@ interface ForumCardProps {
   content: string;
   username: string;
   createdAt: string;
+  userId: string;
+  id: string;
+  setPosts: any;
+}
+
+interface Post {
+  content: string;
+  src: string;
+  category: "NON_ANONYMOUS" | "ANONYMOUS";
+  username: string;
+  createdAt: string;
+  userId: string;
+  updatedAt: string;
+  id: string;
 }
 
 export function ForumCard({
@@ -35,8 +51,18 @@ export function ForumCard({
   content,
   username,
   createdAt,
+  userId,
+  id,
+  setPosts,
 }: ForumCardProps) {
   const time = formatElapsedTime(createdAt);
+  const user = useCurrentUser();
+
+  const handleDelete = async () => {
+    console.log("INSIDE DELETE", id);
+    await axios.delete(`/api/posts/${id}`);
+    setPosts((prev: Post[]) => prev.filter((item: Post) => item.id !== id));
+  };
 
   return (
     <Card className="bg-secondary">
@@ -59,19 +85,21 @@ export function ForumCard({
             </CardTitle>
             <CardDescription>{time}</CardDescription>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon">
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Trash className="w-4 h-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {userId === user?.id && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" size="icon">
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleDelete}>
+                  <Trash className="w-4 h-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </CardHeader>
       <CardContent>
