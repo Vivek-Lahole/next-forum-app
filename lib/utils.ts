@@ -31,11 +31,8 @@ export function formatElapsedTime(dateString: string): string {
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
   const elapsedHours = Math.floor(elapsedMinutes / 60);
   const elapsedDays = Math.floor(elapsedHours / 24);
-  const elapsedYears = Math.floor(elapsedDays / 365);
 
-  if (elapsedYears > 0) {
-    return `${elapsedYears} year${elapsedYears > 1 ? "s" : ""} ago`;
-  } else if (elapsedDays > 0) {
+  if (elapsedDays > 0) {
     return `${elapsedDays} day${elapsedDays > 1 ? "s" : ""} ago`;
   } else if (elapsedHours > 0) {
     return `${elapsedHours} hour${elapsedHours > 1 ? "s" : ""} ago`;

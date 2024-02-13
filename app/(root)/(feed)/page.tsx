@@ -1,14 +1,49 @@
 "use client";
 import { CreatePost } from "@/components/CreatePost";
 import { ForumCard } from "@/components/ForumCard";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useSession } from "next-auth/react";
-import prisma from "@/prisma/PrismaClient";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { DotLoader } from "react-spinners";
+
+interface Post {
+  content: string;
+  src: string;
+  category: "NON_ANONYMOUS" | "ANONYMOUS";
+  username: string;
+  createdAt: string;
+  userId: string | null;
+  updatedAt: string;
+}
 
 const Feed = () => {
   const user = useCurrentUser();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("/api/feed")
+      .then((response) => {
+        console.log(response.data);
+        setPosts(response.data.posts);
+      })
+      .catch((error) => {
+        console.log("Error Fetching Posts", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <DotLoader color="#4A96FF" size={60} speedMultiplier={1} />
+      </div>
+    );
+  }
 
   return (
     <ScrollArea className="h-screen w-full flex items-center justify-center rounded-md p-4">
@@ -22,42 +57,20 @@ const Feed = () => {
                 the community 🤗
               </p>
             </div>
-            <CreatePost />
+            <CreatePost setPosts={setPosts} />
           </div>
         )}
+
         <div className="flex flex-col items-center justify-center space-y-2 mt-3">
-          <ForumCard
-            src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f350.png"
-            category="ANONYMOUS"
-            username="viveklahole2020@gmail.com"
-            content="How are you doing today? Would you like to share something with
-                the community 🤗"
-            createdAt={"2024-02-12 19:03:01.06"}
-          />
-          <ForumCard
-            src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f350.png"
-            category="NON_ANONYMOUS"
-            username="viveklahole2020@gmail.com"
-            content="How are you doing today? Would you like to share something with
-                the community 🤗"
-            createdAt={"2024-02-12 19:03:01.06"}
-          />
-          <ForumCard
-            src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f350.png"
-            category="NON_ANONYMOUS"
-            username="viveklahole2020@gmail.com"
-            content="How are you doing today? Would you like to share something with
-                the community 🤗"
-            createdAt={"2024-02-12 19:03:01.06"}
-          />
-          <ForumCard
-            src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f350.png"
-            category="NON_ANONYMOUS"
-            username="viveklahole2020@gmail.com"
-            content="How are you doing today? Would you like to share something with
-                the community 🤗"
-            createdAt={"2024-02-12 19:03:01.06"}
-          />
+          {posts.map((item: Post) => (
+            <ForumCard
+              src={item.src}
+              category={item.category}
+              username={item.username}
+              content={item.content}
+              createdAt={item.createdAt}
+            />
+          ))}
         </div>
       </div>
     </ScrollArea>

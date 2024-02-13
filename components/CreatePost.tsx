@@ -27,7 +27,17 @@ import { Checkbox } from "./ui/checkbox";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 
-export function CreatePost() {
+interface Post {
+  content: string;
+  src: string;
+  category: "NON_ANONYMOUS" | "ANONYMOUS";
+  username: string;
+  createdAt: string;
+  userId: string | null;
+  updatedAt: string;
+}
+
+export function CreatePost({ setPosts }: any) {
   const [isVisible, setVisible] = useState(false);
   const [emoji, setEmoji] = useState(
     "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4ac.png"
@@ -51,13 +61,17 @@ export function CreatePost() {
 
     const payload = {
       content,
-      src,
+      src: emoji,
       category: anonymous ? "ANONYMOUS" : "NON_ANONYMOUS",
       userId: session?.id,
     };
     startTransition(async () => {
       try {
         const post = await axios.post("/api/posts", payload);
+        console.log(post.data);
+        setPosts((prevPosts: Post[]) =>
+          [...prevPosts, post.data.post].reverse()
+        );
       } catch (error) {
         console.log("Error in Creating Post", error);
         toast({
@@ -121,6 +135,18 @@ export function CreatePost() {
                           <AvatarImage src={emoji} alt="emoji" />
                           <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
+                        {isVisible && (
+                          <div className="absolute top-[25%] left-0 z-50">
+                            <EmojiPicker
+                              height={400}
+                              width={800}
+                              onEmojiClick={(item) => {
+                                setVisible(!isVisible);
+                                setEmoji(item.imageUrl);
+                              }}
+                            />
+                          </div>
+                        )}
                       </Button>
                     </FormControl>
                     <FormMessage />
@@ -144,20 +170,6 @@ export function CreatePost() {
                   </FormItem>
                 )}
               />
-
-              {isVisible && (
-                <div className="absolute top-[25%] left-0 z-50">
-                  <EmojiPicker
-                    height={400}
-                    width={800}
-                    onEmojiClick={(item) => {
-                      setVisible(!isVisible);
-                      setEmoji(item.imageUrl);
-                      console.log(item);
-                    }}
-                  />
-                </div>
-              )}
             </div>
           </CardContent>
 
