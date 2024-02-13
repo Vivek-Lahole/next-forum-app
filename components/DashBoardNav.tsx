@@ -12,6 +12,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const sidebarNav = [
   {
@@ -29,17 +30,11 @@ const sidebarNav = [
 export default function DashboardNav() {
   const path = usePathname();
   const router = useRouter();
-  const session = useSession();
-
-  const [isLogIn, setLogIn] = useState(session.data);
-
-  useEffect(() => {
-    console.log("I AM TRIGGERED");
-  }, [session.data]);
+  const user = useCurrentUser();
 
   const handleLogout = async () => {
     await signOut();
-    setLogIn(null);
+    router.push("/auth");
   };
 
   return (
@@ -68,7 +63,7 @@ export default function DashboardNav() {
                 );
               })}
             </nav>
-            {isLogIn && (
+            {user && (
               <span
                 className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 onClick={handleLogout}
@@ -78,7 +73,7 @@ export default function DashboardNav() {
               </span>
             )}
 
-            {!isLogIn && (
+            {!user && (
               <span
                 className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 onClick={() => {

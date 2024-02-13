@@ -23,17 +23,13 @@ export default auth((req): any => {
     if (isLogIn) {
       return Response.redirect(new URL("/", nextUrl));
     }
-    console.log("HERE 2");
 
     return null;
   }
 
   if (!isLogIn && !isPublicRoute) {
-    console.log("HERE 3");
-
     return Response.redirect(new URL("/auth", nextUrl));
   }
-  console.log("HERE 4");
 
   return null;
 });

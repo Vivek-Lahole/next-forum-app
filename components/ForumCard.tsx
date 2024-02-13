@@ -19,27 +19,45 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageSquare, MoreHorizontal, Trash } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "./ui/button";
+import { formatElapsedTime } from "@/lib/utils";
 
-export function ForumCard() {
-  const [chosenEmoji, setChosenEmoji] = React.useState(null);
+interface ForumCardProps {
+  src: string;
+  category: "ANONYMOUS" | "NON_ANONYMOUS";
+  content: string;
+  username: string;
+  createdAt: string;
+}
 
-  const onEmojiClick = (event: any, emojiObject: any) => {
-    setChosenEmoji(emojiObject);
-  };
+export function ForumCard({
+  src,
+  category,
+  content,
+  username,
+  createdAt,
+}: ForumCardProps) {
+  const time = formatElapsedTime(createdAt);
 
   return (
     <Card className="bg-secondary">
       <CardHeader className="flex justify-between">
         <div className="flex space-x-6">
           <Avatar className="h-[44px] w-[44px]">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage
+              src={
+                category === "ANONYMOUS"
+                  ? "/anonymous.jpg"
+                  : "https://github.com/shadcn.png"
+              }
+              alt="@shadcn"
+            />
+            <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="flex flex-col justify-center flex-1">
             <CardTitle className="text-sm font-normal leading-none tracking-tight">
-              Theresa Web
+              {category === "ANONYMOUS" ? "Anonymous" : username}
             </CardTitle>
-            <CardDescription>5 min ago</CardDescription>
+            <CardDescription>{time}</CardDescription>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -60,16 +78,12 @@ export function ForumCard() {
         <div className="w-[660px] h-[107px] bg-background rounded-md flex items-center justify-between space-x-2">
           <div className="h-[48px] w-[48px] flex items-center justify-center m-3 rounded-full bg-secondary ">
             <Avatar className="h-[18px] w-[18px]">
-              <AvatarImage
-                src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f496.png"
-                alt="@shadcn"
-              />
+              <AvatarImage src={src} alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </div>
-          <ScrollArea className="h-full w-full text-muted-foreground text-xs">
-            Jokester began sneaking into the castle in the middle of the night
-            and leaving jokes all over the place: under the king's pillow, in
+          <ScrollArea className="h-full w-full text-muted-foreground text-xs p-5">
+            {content}
           </ScrollArea>
         </div>
       </CardContent>

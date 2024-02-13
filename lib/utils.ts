@@ -21,3 +21,27 @@ export async function validateUser(
   const result = await bcrypt.compare(password, passwordHash);
   return result;
 }
+
+export function formatElapsedTime(dateString: string): string {
+  const currentDate = new Date();
+  const date = new Date(dateString);
+
+  const elapsedMilliseconds = currentDate.getTime() - date.getTime();
+  const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  const elapsedDays = Math.floor(elapsedHours / 24);
+  const elapsedYears = Math.floor(elapsedDays / 365);
+
+  if (elapsedYears > 0) {
+    return `${elapsedYears} year${elapsedYears > 1 ? "s" : ""} ago`;
+  } else if (elapsedDays > 0) {
+    return `${elapsedDays} day${elapsedDays > 1 ? "s" : ""} ago`;
+  } else if (elapsedHours > 0) {
+    return `${elapsedHours} hour${elapsedHours > 1 ? "s" : ""} ago`;
+  } else if (elapsedMinutes > 0) {
+    return `${elapsedMinutes} minute${elapsedMinutes > 1 ? "s" : ""} ago`;
+  } else {
+    return "Just now";
+  }
+}

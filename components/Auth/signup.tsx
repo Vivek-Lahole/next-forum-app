@@ -59,7 +59,8 @@ const SignUpForm = () => {
           variant: "default",
           title: `${response.data.message}`,
         });
-        router.push("/");
+        router.push("/auth");
+        router.refresh();
       } catch (error: any) {
         console.log("Error : ", error);
         toast({

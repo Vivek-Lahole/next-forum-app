@@ -38,6 +38,7 @@ model Post {
   category Category @default(NON_ANONYMOUS)
   src      String
   content  String   @db.Text
+  username String
 
   // meta-data
   createdAt DateTime @default(now())

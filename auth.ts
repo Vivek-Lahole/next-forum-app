@@ -17,9 +17,22 @@ export const {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
+
+      // if (session.user) {
+      //   session.user.username = token.username;
+      // }
       return session;
     },
     async jwt({ token }) {
+      // const user = await prisma.user.findUnique({
+      //   where: {
+      //     id: token.sub,
+      //   },
+      // });
+
+      // if (!user) return token;
+
+      // token.username = user.username;
       return token;
     },
   },

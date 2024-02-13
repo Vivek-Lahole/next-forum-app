@@ -53,11 +53,8 @@ const SignInForm = () => {
       try {
         const response = await axios.post("/api/signin", payload);
         console.log(response.data.message);
-        // toast({
-        //   variant: "default",
-        //   title: `${response.data.message}`,
-        // });
         router.push("/");
+        router.refresh();
       } catch (error: any) {
         console.log("Error : ", error);
         toast({
