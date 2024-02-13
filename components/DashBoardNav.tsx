@@ -43,7 +43,7 @@ export default function DashboardNav() {
   };
 
   return (
-    <nav className={cn(`relative hidden h-screen  lg:block w-40 pt-5`)}>
+    <nav className={cn(`relative hidden h-screen  lg:block w-40 `)}>
       <div className="space-y-2 py-2">
         <div className="px-3 py-2">
           <div className="space-y-1">

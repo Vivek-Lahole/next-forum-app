@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <body>
       <div>
-        <div className="flex h-screen overflow-scroll">
+        <div className="flex h-screen ">
           <DashboardNav />
           <main className="w-full h-screen flex flex-col items-center justify-center">
             {children}
