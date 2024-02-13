@@ -1,14 +1,23 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
-import { Sidebar, LayoutDashboard, Users, LogOut } from "lucide-react";
+import {
+  Sidebar,
+  LayoutDashboard,
+  Users,
+  LogOut,
+  KeyRound,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const sidebarNav = [
   {
     title: "Feed",
     icon: LayoutDashboard,
-    path: "/feed",
+    path: "/",
   },
   {
     title: "Posts",
@@ -20,6 +29,19 @@ const sidebarNav = [
 export default function DashboardNav() {
   const path = usePathname();
   const router = useRouter();
+  const session = useSession();
+
+  const [isLogIn, setLogIn] = useState(session.data);
+
+  useEffect(() => {
+    console.log("I AM TRIGGERED");
+  }, [session.data]);
+
+  const handleLogout = async () => {
+    await signOut();
+    setLogIn(null);
+  };
+
   return (
     <nav className={cn(`relative hidden h-screen  lg:block w-40 pt-5`)}>
       <div className="space-y-2 py-2">
@@ -46,10 +68,27 @@ export default function DashboardNav() {
                 );
               })}
             </nav>
-            <span className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span className="text-sm">Logout</span>
-            </span>
+            {isLogIn && (
+              <span
+                className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                onClick={handleLogout}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span className="text-sm">Logout</span>
+              </span>
+            )}
+
+            {!isLogIn && (
+              <span
+                className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                onClick={() => {
+                  router.push("/auth");
+                }}
+              >
+                <KeyRound className="mr-2 h-4 w-4" />
+                <span className="text-sm">Signin</span>
+              </span>
+            )}
           </div>
         </div>
       </div>
