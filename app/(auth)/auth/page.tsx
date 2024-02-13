@@ -6,8 +6,8 @@ import SignInForm from "@/components/Auth/signin";
 
 const authPage = () => {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Tabs defaultValue="signin" className="w-[600px]">
+    <div className="flex items-center h-screen">
+      <Tabs defaultValue="signin" className="w-[600px] h-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signup">Sign-Up</TabsTrigger>
           <TabsTrigger value="signin">Login</TabsTrigger>
