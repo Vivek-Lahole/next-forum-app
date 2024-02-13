@@ -23,7 +23,7 @@ const sidebarNav = [
   {
     title: "Posts",
     icon: Users,
-    path: "/posts",
+    path: "/posts/",
   },
 ];
 
@@ -35,6 +35,7 @@ export default function DashboardNav() {
   const handleLogout = async () => {
     await signOut();
     router.push("/auth");
+    router.refresh();
   };
 
   return (

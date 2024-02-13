@@ -13,8 +13,9 @@ interface Post {
   category: "NON_ANONYMOUS" | "ANONYMOUS";
   username: string;
   createdAt: string;
-  userId: string | null;
+  userId: string;
   updatedAt: string;
+  id: string;
 }
 
 const Feed = () => {
@@ -26,7 +27,6 @@ const Feed = () => {
     axios
       .get("/api/feed")
       .then((response) => {
-        console.log(response.data);
         setPosts(response.data.posts);
       })
       .catch((error) => {
@@ -35,12 +35,12 @@ const Feed = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [setPosts]);
 
   if (loading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <DotLoader color="#4A96FF" size={60} speedMultiplier={1} />
+      <div className="w-screen h-full flex items-center justify-center">
+        <DotLoader color="#ffffff" size={60} speedMultiplier={1} />
       </div>
     );
   }
@@ -60,7 +60,6 @@ const Feed = () => {
             <CreatePost setPosts={setPosts} />
           </div>
         )}
-
         <div className="flex flex-col items-center justify-center space-y-2 mt-3">
           {posts.map((item: Post) => (
             <ForumCard
@@ -69,6 +68,9 @@ const Feed = () => {
               username={item.username}
               content={item.content}
               createdAt={item.createdAt}
+              userId={item.userId}
+              id={item.id}
+              setPosts={setPosts}
             />
           ))}
         </div>

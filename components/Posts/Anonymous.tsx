@@ -1,11 +1,11 @@
 "use client";
-import { CreatePost } from "@/components/CreatePost";
 import { ForumCard } from "@/components/ForumCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DotLoader } from "react-spinners";
+import { Badge } from "@/components/ui/badge";
 
 interface Post {
   content: string;
@@ -13,21 +13,20 @@ interface Post {
   category: "NON_ANONYMOUS" | "ANONYMOUS";
   username: string;
   createdAt: string;
-  userId: string | null;
+  userId: string;
   updatedAt: string;
+  id: string;
 }
 
 const Anonymous = () => {
-  const user = useCurrentUser();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get("/api/feed")
+      .get("/api/posts/anonymous")
       .then((response) => {
-        console.log(response.data);
-        setPosts(response.data.posts);
+        setPosts(response.data.anonymousPosts);
       })
       .catch((error) => {
         console.log("Error Fetching Posts", error);
@@ -39,8 +38,16 @@ const Anonymous = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <DotLoader color="#4A96FF" size={60} speedMultiplier={1} />
+      <div className="w-full h-screen flex items-center justify-center">
+        <DotLoader color="#ffffff" size={60} speedMultiplier={1} />
+      </div>
+    );
+  }
+
+  if (!posts.length) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Badge>Oops No posts yet!</Badge>
       </div>
     );
   }
@@ -56,6 +63,9 @@ const Anonymous = () => {
               username={item.username}
               content={item.content}
               createdAt={item.createdAt}
+              userId={item.userId}
+              id={item.id}
+              setPosts={setPosts}
             />
           ))}
         </div>

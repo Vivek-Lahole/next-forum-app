@@ -33,8 +33,9 @@ interface Post {
   category: "NON_ANONYMOUS" | "ANONYMOUS";
   username: string;
   createdAt: string;
-  userId: string | null;
+  userId: string;
   updatedAt: string;
+  id: string;
 }
 
 export function CreatePost({ setPosts }: any) {
@@ -57,7 +58,7 @@ export function CreatePost({ setPosts }: any) {
   });
 
   async function postSubmit(values: z.infer<typeof postFormSchema>) {
-    const { content, src, anonymous } = values;
+    const { content, anonymous } = values;
 
     const payload = {
       content,
