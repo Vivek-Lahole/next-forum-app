@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginFormSchema } from "@/FormSchemas/SignInForm";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Card,
   CardContent,
@@ -30,6 +31,7 @@ const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { toast } = useToast();
 
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -40,7 +42,31 @@ const SignInForm = () => {
   });
 
   async function loginSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+    const { username, password } = values;
+
+    const payload = {
+      username,
+      password,
+    };
+
+    startTransition(async () => {
+      try {
+        const response = await axios.post("/api/signin", payload);
+        console.log(response.data.message);
+        toast({
+          variant: "default",
+          title: `${response.data.message}`,
+        });
+        // router.push("/");
+      } catch (error: any) {
+        console.log("Error : ", error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
+      }
+    });
   }
 
   return (

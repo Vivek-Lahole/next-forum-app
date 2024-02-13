@@ -1,5 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
+import { signIn } from "@/auth";
+import { loginFormSchema } from "@/FormSchemas/SignInForm";
 
 export async function POST(req: NextRequest) {
-  return NextResponse.json({ message: "Hello from Signin!" });
+  const body = await req.json();
+
+  console.log(body);
+  const { success } = loginFormSchema.safeParse(body);
+  if (!success) {
+    return NextResponse.json({
+      message: "Invalid daata feilds",
+    });
+  }
+
+  const { username, password } = body;
+
+  try {
+    await signIn("credentials", {
+      username,
+      password,
+      redirectTo: "/",
+    });
+    return NextResponse.json({ message: "Login Successful!" });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
