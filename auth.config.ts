@@ -11,7 +11,6 @@ export default {
       async authorize(credentials, req) {
         console.log(credentials);
         const validateFeilds = loginFormSchema.safeParse(credentials);
-        console.log("IN AUTH CONFIG");
 
         if (validateFeilds.success) {
           const { username, password } = validateFeilds.data;

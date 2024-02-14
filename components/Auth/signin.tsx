@@ -63,6 +63,7 @@ const SignInForm = () => {
           description: "There was a problem with your request.",
         });
       }
+      loginForm.reset();
     });
   }
 

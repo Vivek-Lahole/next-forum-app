@@ -58,6 +58,7 @@ const Anonymous = () => {
         <div className="flex flex-col items-center justify-center space-y-2">
           {posts.map((item: Post) => (
             <ForumCard
+              key={item.id}
               src={item.src}
               category={item.category}
               username={item.username}
