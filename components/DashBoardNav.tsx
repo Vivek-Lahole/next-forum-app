@@ -23,18 +23,18 @@ const sidebarNav = [
   {
     title: "Posts",
     icon: Users,
-    path: "/posts/",
+    path: "/posts",
   },
 ];
 
 export default function DashboardNav() {
   const path = usePathname();
   const router = useRouter();
-  const user = useCurrentUser();
+  const { status } = useSession();
 
   const handleLogout = async () => {
     await signOut();
-    router.push("/auth");
+    router.push("/");
     router.refresh();
   };
 
@@ -64,7 +64,7 @@ export default function DashboardNav() {
                 );
               })}
             </nav>
-            {user && (
+            {status === "authenticated" && (
               <span
                 className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 onClick={handleLogout}
@@ -74,7 +74,7 @@ export default function DashboardNav() {
               </span>
             )}
 
-            {!user && (
+            {status !== "authenticated" && (
               <span
                 className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 onClick={() => {

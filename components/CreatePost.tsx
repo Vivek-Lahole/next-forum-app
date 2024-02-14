@@ -81,6 +81,7 @@ export function CreatePost({ setPosts }: any) {
           description: "There was a problem with creatign Post.",
         });
       }
+      createPostForm.reset();
     });
   }
 

@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DotLoader } from "react-spinners";
+import { useSession } from "next-auth/react";
 
 interface Post {
   content: string;
@@ -19,7 +20,7 @@ interface Post {
 }
 
 const Feed = () => {
-  const user = useCurrentUser();
+  const { status, data } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,10 +49,10 @@ const Feed = () => {
   return (
     <ScrollArea className="h-screen w-full flex items-center justify-center rounded-md p-4">
       <div className="p-4 flex flex-col items-center">
-        {user && (
+        {status === "authenticated" && (
           <div className="flex flex-col w-full items-center justify-center">
             <div className="w-[700px] space-y-4 m-6">
-              <h2 className=" text-2xl">Hello {user?.email}</h2>
+              <h2 className=" text-2xl">Hello {data.user?.email}</h2>
               <p className=" text-sm text-muted-foreground">
                 How are you doing today? Would you like to share something with
                 the community! 🤗
@@ -63,6 +64,7 @@ const Feed = () => {
         <div className="flex flex-col items-center justify-center space-y-2 mt-3">
           {posts.map((item: Post) => (
             <ForumCard
+              key={item.id}
               src={item.src}
               category={item.category}
               username={item.username}
