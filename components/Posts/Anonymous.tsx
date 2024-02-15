@@ -44,7 +44,7 @@ const Anonymous = () => {
     );
   }
 
-  if (!posts.length) {
+  if (!posts?.length) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <Badge>Oops No posts yet!</Badge>
@@ -56,7 +56,7 @@ const Anonymous = () => {
     <ScrollArea className="h-screen w-full flex items-center justify-center rounded-md mt-4">
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center justify-center space-y-2">
-          {posts.map((item: Post) => (
+          {posts?.map((item: Post) => (
             <ForumCard
               key={item.id}
               src={item.src}

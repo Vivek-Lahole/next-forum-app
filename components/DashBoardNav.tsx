@@ -50,6 +50,7 @@ export default function DashboardNav() {
               {sidebarNav.map((item) => {
                 return (
                   <span
+                    key={item.path}
                     className={cn(
                       "group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer",
                       path === item.path ? "bg-accent" : "transparent"
