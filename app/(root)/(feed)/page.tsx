@@ -62,7 +62,7 @@ const Feed = () => {
           </div>
         )}
         <div className="flex flex-col items-center justify-center space-y-2 mt-3">
-          {posts.map((item: Post) => (
+          {posts?.map((item: Post) => (
             <ForumCard
               key={item.id}
               src={item.src}
