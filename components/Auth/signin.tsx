@@ -52,7 +52,6 @@ const SignInForm = () => {
     startTransition(async () => {
       try {
         const response = await axios.post("/api/signin", payload);
-        console.log(response.data.message);
         router.push("/");
         router.refresh();
       } catch (error: any) {

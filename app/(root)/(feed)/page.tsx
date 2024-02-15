@@ -2,7 +2,6 @@
 import { CreatePost } from "@/components/CreatePost";
 import { ForumCard } from "@/components/ForumCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DotLoader } from "react-spinners";

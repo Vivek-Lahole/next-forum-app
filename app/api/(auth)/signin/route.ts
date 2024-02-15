@@ -5,7 +5,6 @@ import { loginFormSchema } from "@/FormSchemas/SignInForm";
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  console.log(body);
   const { success } = loginFormSchema.safeParse(body);
   if (!success) {
     return NextResponse.json({

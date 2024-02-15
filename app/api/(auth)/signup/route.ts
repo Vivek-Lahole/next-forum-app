@@ -29,7 +29,5 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  console.log("USER", user);
-
   return NextResponse.json({ message: "User Created Succesfully!" });
 }

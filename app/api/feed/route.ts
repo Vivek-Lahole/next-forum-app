@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/prisma/PrismaClient";
+import { auth } from "@/auth";
 
 export async function GET(req: NextRequest) {
+  const session = await auth();
+
+  if (!session) {
+    return NextResponse.json({ message: "Unauthorised!" });
+  }
+
   try {
     const posts = await prisma.post.findMany({});
 

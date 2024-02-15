@@ -59,7 +59,6 @@ export function ForumCard({
   const user = useCurrentUser();
 
   const handleDelete = async () => {
-    console.log("INSIDE DELETE", id);
     await axios.delete(`/api/posts/${id}`);
     setPosts((prev: Post[]) => prev.filter((item: Post) => item.id !== id));
   };

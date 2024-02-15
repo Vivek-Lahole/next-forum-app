@@ -69,7 +69,6 @@ export function CreatePost({ setPosts }: any) {
     startTransition(async () => {
       try {
         const post = await axios.post("/api/posts", payload);
-        console.log(post.data);
         setPosts((prevPosts: Post[]) =>
           [...prevPosts, post.data.post].reverse()
         );

@@ -9,7 +9,6 @@ export default {
   providers: [
     Credentials({
       async authorize(credentials, req) {
-        console.log(credentials);
         const validateFeilds = loginFormSchema.safeParse(credentials);
 
         if (validateFeilds.success) {
