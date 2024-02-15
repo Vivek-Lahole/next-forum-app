@@ -35,7 +35,7 @@ const Feed = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [setPosts]);
+  }, []);
 
   if (loading) {
     return (
@@ -46,37 +46,39 @@ const Feed = () => {
   }
 
   return (
-    <ScrollArea className="h-screen w-full flex items-center justify-center rounded-md p-4">
-      <div className="p-4 flex flex-col items-center">
-        {status === "authenticated" && (
-          <div className="flex flex-col w-full items-center justify-center">
-            <div className="w-[700px] space-y-4 m-6">
-              <h2 className=" text-2xl">Hello {data.user?.email}</h2>
-              <p className=" text-sm text-muted-foreground">
-                How are you doing today? Would you like to share something with
-                the community! 🤗
-              </p>
+    <div className="h-screen w-full">
+      <ScrollArea className="h-full w-full flex items-center justify-center rounded-md p-4">
+        <div className="p-4 flex flex-col items-center">
+          {status === "authenticated" && (
+            <div className="flex flex-col w-full items-center justify-center">
+              <div className="w-[700px] space-y-4 m-6">
+                <h2 className=" text-2xl">Hello {data.user?.email}</h2>
+                <p className=" text-sm text-muted-foreground">
+                  How are you doing today? Would you like to share something
+                  with the community! 🤗
+                </p>
+              </div>
+              <CreatePost setPosts={setPosts} />
             </div>
-            <CreatePost setPosts={setPosts} />
+          )}
+          <div className="flex flex-col items-center justify-center space-y-2 mt-3">
+            {posts?.map((item: Post) => (
+              <ForumCard
+                key={item.id}
+                src={item.src}
+                category={item.category}
+                username={item.username}
+                content={item.content}
+                createdAt={item.createdAt}
+                userId={item.userId}
+                id={item.id}
+                setPosts={setPosts}
+              />
+            ))}
           </div>
-        )}
-        <div className="flex flex-col items-center justify-center space-y-2 mt-3">
-          {posts?.map((item: Post) => (
-            <ForumCard
-              key={item.id}
-              src={item.src}
-              category={item.category}
-              username={item.username}
-              content={item.content}
-              createdAt={item.createdAt}
-              userId={item.userId}
-              id={item.id}
-              setPosts={setPosts}
-            />
-          ))}
         </div>
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    </div>
   );
 };
 

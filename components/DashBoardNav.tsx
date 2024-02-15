@@ -2,17 +2,9 @@
 
 import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
-import {
-  Sidebar,
-  LayoutDashboard,
-  Users,
-  LogOut,
-  KeyRound,
-} from "lucide-react";
+import { LayoutDashboard, Users, LogOut, KeyRound } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const sidebarNav = [
   {
@@ -34,12 +26,12 @@ export default function DashboardNav() {
 
   const handleLogout = async () => {
     await signOut();
-    router.push("/");
+    router.push("/auth");
     router.refresh();
   };
 
   return (
-    <nav className={cn(`relative hidden h-screen  lg:block w-40 `)}>
+    <nav className={cn(`relative hidden h-screen  lg:block `)}>
       <div className="space-y-2 py-2">
         <div className="px-3 py-2">
           <div className="space-y-1">
@@ -80,6 +72,7 @@ export default function DashboardNav() {
                 className="group flex items-center rounded-md px-4 py-2 text-lg font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
                 onClick={() => {
                   router.push("/auth");
+                  router.refresh();
                 }}
               >
                 <KeyRound className="mr-2 h-4 w-4" />
